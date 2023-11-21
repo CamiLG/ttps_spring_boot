@@ -23,6 +23,10 @@ public class SaldoPorPersona {
 	@ManyToOne
     @JoinColumn(name = "usuarioId")
 	private Usuario saldoUsuario;
+	
+	@ManyToOne
+	@JoinColumn(name="gasto_id", nullable=false)
+	private Gasto gasto;
 
 	public SaldoPorPersona(Long id, double monto, Usuario saldoUsuario) {
 		this.id = id;

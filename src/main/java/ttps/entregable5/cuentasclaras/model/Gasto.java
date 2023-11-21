@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 
@@ -48,7 +49,7 @@ public class Gasto {
     @JoinColumn(name = "imgId")
 	private Imagen img;
 	
-	@ManyToMany(mappedBy = "saldoUsuario")
+	@OneToMany(mappedBy = "gasto")
 	private List<SaldoPorPersona> saldosUsuario;
 	
 	@ManyToOne()
