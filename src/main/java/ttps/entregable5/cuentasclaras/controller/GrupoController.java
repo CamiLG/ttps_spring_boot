@@ -17,15 +17,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ttps.entregable5.cuentasclaras.model.Usuario;
+import ttps.entregable5.cuentasclaras.repository.GrupoRepository;
 import ttps.entregable5.cuentasclaras.repository.UsuarioRepository;
 
 @Controller
-@RequestMapping(path="/usuarios", produces = MediaType.APPLICATION_JSON_VALUE)
-public class UserController {
+@RequestMapping(path="/grupo", produces = MediaType.APPLICATION_JSON_VALUE)
+public class GrupoController {
 
 	@Autowired
-	private UsuarioRepository userRepo;
-	
+	private GrupoRepository grupoRepo;
+	//A completar
 	  @PostMapping // Map ONLY POST Requests
 		public ResponseEntity<String> createUser(@RequestBody Usuario user){
 			
@@ -69,32 +70,6 @@ public class UserController {
 
 	  }
 	  
-	  
-	  
-		/**En el header enviar token: {idUsuario}+’123456’
-		Retorna #200 con los datos del usuario
-		especificado, #404 si no se encuentra el usuario y
-		#401 en caso de token inválido.**/	
-/**	  
-		@GetMapping("{id}")
-		public ResponseEntity<Usuario> getUser(@PathVariable("id")long id, @RequestHeader(name = "token") String token){
-		
-			String tokenEsperado = id + "123456";
-	        if (tokenEsperado != token) {
-	            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-	        }
-			
-	       System.out.println("Obteniendo un usuario con id" + id);
-			
-			if(userRepo.findById(id) == null) {
-				System.out.println("Usuario no encontrado");
-				return new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND);
-			
-			}
-		    Usuario usuario = userRepo.getReferenceById(id); //ver que onda esto
-			return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
-		}	 
-	  **/
 	  @GetMapping(path="test")
 	  public ResponseEntity<String> testApp(){
 	

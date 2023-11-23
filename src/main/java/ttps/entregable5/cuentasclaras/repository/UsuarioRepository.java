@@ -17,6 +17,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 	Usuario findByUsuarioAndPassword(String usuario, String password);
 	List <Usuario> findByNombre(String nombre);
 	boolean existsByEmail(String email);
+	boolean existsByUsuario(String usuario);
 	
 	//Guardar/actualizar y borrar usuarios
 	Usuario save(Usuario usr);
