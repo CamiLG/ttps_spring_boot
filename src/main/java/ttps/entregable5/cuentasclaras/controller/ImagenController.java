@@ -52,11 +52,14 @@ public class ImagenController {
 
 	}
 
-	@PutMapping("/edit")
-	public ResponseEntity<Imagen> editarImagen(Imagen img) {
-		// chequear si la imagen existe y modificarla
-		if (imgRepo.existsByNombre(img.getNombre())) {
-			Imagen imagen = imgRepo.findByNombre(img.getNombre());
+	@PutMapping("/{id}")
+	public ResponseEntity<Imagen> editarImagen(@RequestBody Imagen img, @PathVariable("id") Long id) {
+		Optional<Imagen> imgR = imgRepo.findById(id);
+		if (imgR.isPresent()) {
+			Imagen imagen = imgR.get();
+			imagen.setNombre(img.getNombre());
+			imagen.setPath(img.getPath());
+			imgRepo.save(imagen);
 			return new ResponseEntity<Imagen>(imagen, HttpStatus.OK);
 		}
 		return new ResponseEntity<Imagen>(HttpStatus.NOT_FOUND);

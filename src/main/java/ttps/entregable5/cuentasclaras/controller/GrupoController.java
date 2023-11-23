@@ -57,13 +57,16 @@ public class GrupoController {
 		
 		}
 	  
-	  @PutMapping("/edit")
-	  public ResponseEntity<Grupo> editarGrupo(Grupo grp) {
-		  //chequear si el grupo existe y modificarlo
-		  if(grupoRepo.existsByNombre(grp.getNombre())){
-			 Grupo grupo = grupoRepo.findByNombre(grp.getNombre());
-			 return new ResponseEntity<Grupo>(grupo,HttpStatus.OK);
-		  }
+	  @PutMapping("/{id}")
+	  public ResponseEntity<Grupo> editarGrupo(@RequestBody Grupo grp, @PathVariable("id") Long id) {
+		  Optional<Grupo> grupoR = grupoRepo.findById(id);
+			if (grupoR.isPresent()) {
+				Grupo grupo = grupoR.get();
+				grupo.setNombre(grp.getNombre());
+				grupo.setCategoriaGrupo(grp.getCategoriaGrupo());
+				grupoRepo.save(grupo);
+				return new ResponseEntity<Grupo>(grupo, HttpStatus.OK);
+			}
 		  return new ResponseEntity<Grupo>(HttpStatus.NOT_FOUND);
 	  }
 	  

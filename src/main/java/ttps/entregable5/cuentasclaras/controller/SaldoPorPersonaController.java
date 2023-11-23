@@ -26,7 +26,7 @@ public class SaldoPorPersonaController {
 	private SaldoPorPersonaRepository sppRepo;
 	
 
-	@PostMapping("/create")
+	@PostMapping
 	public ResponseEntity<String> crearSaldosPersona(@RequestBody SaldoPorPersona spp) {
 		// recibir el saldo por persona y validar que el usuario no sea nulo
 		if (spp == null || spp.getSaldoUsuario() == null) {
@@ -53,11 +53,14 @@ public class SaldoPorPersonaController {
 
 	}
 
-	@PutMapping("/edit")
-	public ResponseEntity<SaldoPorPersona> editarSaldosPorPersona(SaldoPorPersona spp) {
-		// chequear si el saldo por persona existe y modificarlo
-		if (sppRepo.existsBySaldoUsuario(spp.getSaldoUsuario())) {
-			SaldoPorPersona saldo = sppRepo.findBySaldoUsuario(spp.getSaldoUsuario());
+	@PutMapping("/{id}")
+	public ResponseEntity<SaldoPorPersona> editarSaldosPorPersona(@RequestBody SaldoPorPersona spp, @PathVariable("id") Long id) {
+		Optional<SaldoPorPersona> sppR = sppRepo.findById(id);
+		if (sppR.isPresent()) {
+			SaldoPorPersona saldo = sppR.get();
+			saldo.setMonto(spp.getMonto());
+			saldo.setSaldoUsuario(spp.getSaldoUsuario());
+			sppRepo.save(saldo);
 			return new ResponseEntity<SaldoPorPersona>(saldo, HttpStatus.OK);
 		}
 		return new ResponseEntity<SaldoPorPersona>(HttpStatus.NOT_FOUND);

@@ -57,11 +57,17 @@ public class GastoController {
 
 	}
 
-	@PutMapping("/edit")
-	public ResponseEntity<Gasto> editarGasto(Gasto gst) {
-		// chequear si el gasto existe y modificarlo
-		if (gastoRepo.existsByNombre(gst.getNombre())) {
-			Gasto gasto = gastoRepo.findByNombre(gst.getNombre());
+	@PutMapping("/{id}")
+	public ResponseEntity<Gasto> editarGasto(@RequestBody Gasto gst, @PathVariable("id") Long id) {
+		Optional<Gasto> gastoR = gastoRepo.findById(id);
+		if (gastoR.isPresent()) {
+			Gasto gasto = gastoR.get();
+			gasto.setNombre(gst.getNombre());
+			gasto.setMonto(gst.getMonto());
+			gasto.setFormaDivision(gst.getFormaDivision());
+			gasto.setImg(gst.getImg());
+			gasto.setCategoriaGasto(gst.getCategoriaGasto());
+			gastoRepo.save(gasto);
 			return new ResponseEntity<Gasto>(gasto, HttpStatus.OK);
 		}
 		return new ResponseEntity<Gasto>(HttpStatus.NOT_FOUND);
