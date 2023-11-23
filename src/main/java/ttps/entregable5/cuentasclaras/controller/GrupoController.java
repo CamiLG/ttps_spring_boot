@@ -10,75 +10,84 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import ttps.entregable5.cuentasclaras.model.Usuario;
+import ttps.entregable5.cuentasclaras.model.CategoriaGrupo;
+import ttps.entregable5.cuentasclaras.model.Grupo;
+import ttps.entregable5.cuentasclaras.repository.CategoriaGrupoRepository;
 import ttps.entregable5.cuentasclaras.repository.GrupoRepository;
-import ttps.entregable5.cuentasclaras.repository.UsuarioRepository;
 
 @Controller
-@RequestMapping(path="/grupo", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path="/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GrupoController {
 
 	@Autowired
 	private GrupoRepository grupoRepo;
-	//A completar
-	  @PostMapping // Map ONLY POST Requests
-		public ResponseEntity<String> createUser(@RequestBody Usuario user){
-			
-			//recibir el usuario y validar que no sea nulo
-	        if (user == null || user.getEmail() == null) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no ha sido bien cargado");
+	
+	@Autowired
+	private CategoriaGrupoRepository catGRepo;
+	
+	  @PostMapping("/create")
+		public ResponseEntity<String> crearGrupo(@RequestBody Grupo grp){
+			//recibir el grupo y validar que no sea nulo
+	        if (grp == null || grp.getNombre() == null) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El grupo no ha sido bien cargado");
 	        }
-			//validar si el email ya esta en uso
-			if(userRepo.findByEmail(user.getEmail())!= null) {
-				return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Existe una cuenta creada para ese email");
+			//validar si el nombre ya esta en uso
+			if(grupoRepo.findByNombre(grp.getNombre())!= null) {
+				return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Existe un grupo creado con ese nombre");
 			}
-			//insertar el usuario en la db
-			userRepo.save(user);
-			return ResponseEntity.status(HttpStatus.CREATED).body("Usuario creado con éxito");
+			//insertar el grupo en la db
+			grupoRepo.save(grp);
+			return ResponseEntity.status(HttpStatus.CREATED).body("Grupo creado con éxito");
 		}
 	 
 	  @GetMapping("/{id}")
-	  public ResponseEntity<Usuario> getUsuario(@PathVariable(name = "id") Long id) {
-		  Optional<Usuario> usr = userRepo.findById(id);
-		  if (usr.isPresent()) {
-			Usuario usrEncontrado = usr.get();
-			return new ResponseEntity<Usuario>(usrEncontrado, HttpStatus.OK);
+	  public ResponseEntity<Grupo> getGrupo(@PathVariable(name = "id") Long id) {
+		  Optional<Grupo> grp = grupoRepo.findById(id);
+		  if (grp.isPresent()) {
+			Grupo grpEncontrado = grp.get();
+			return new ResponseEntity<Grupo>(grpEncontrado, HttpStatus.OK);
 			}
-			System.out.println("Usuario no encontrado");
-			return new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND);
+			System.out.println("Grupo no encontrado");
+			return new ResponseEntity<Grupo>(HttpStatus.NOT_FOUND);
 		
 		}
 	  
-	  @PostMapping("/login")
-	  public ResponseEntity<Usuario> loginUsuario(String usuario, String password) {
-		  //chequear si el email existe y ver si la password coincide
-		  if(userRepo.existsByUsuario(usuario)){
-			 Usuario usr = userRepo.findByUsuarioAndPassword(usuario, password);
-			 if (usr.getPassword() != password) {
-				 return new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND);
-			 }
-			 return new ResponseEntity<Usuario>(HttpStatus.OK);
-			 
+	  @PutMapping("/edit")
+	  public ResponseEntity<Grupo> editarGrupo(Grupo grp) {
+		  //chequear si el grupo existe y modificarlo
+		  if(grupoRepo.existsByNombre(grp.getNombre())){
+			 Grupo grupo = grupoRepo.findByNombre(grp.getNombre());
+			 return new ResponseEntity<Grupo>(grupo,HttpStatus.OK);
 		  }
-		  return new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND);
-
+		  return new ResponseEntity<Grupo>(HttpStatus.NOT_FOUND);
 	  }
 	  
-	  @GetMapping(path="test")
-	  public ResponseEntity<String> testApp(){
-	
-		  return new ResponseEntity<String>(HttpStatus.I_AM_A_TEAPOT);
+	  
+	  @GetMapping("/all")
+	  public @ResponseBody Iterable<Grupo> getAllGrupos() {
+	    // This returns a JSON or XML with the groups
+	    return grupoRepo.findAll();
 	  }
 	  
-	  @GetMapping(path="/all")
-	  public @ResponseBody Iterable<Usuario> getAllUsers() {
-	    // This returns a JSON or XML with the users
-	    return userRepo.findAll();
-	  }
+		@PostMapping("/create/catGrupo")
+		public ResponseEntity<String> crearCatGrupo(@RequestBody CategoriaGrupo grp) {
+			// recibir la categoria de grupo y validar que no sea nulo
+			if (grp == null || grp.getNombreGrupo() == null) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+						.body("La categoria del grupo no ha sido bien cargada");
+			}
+			// validar si el nombre ya esta en uso
+			if (catGRepo.findByNombreGrupo(grp.getNombreGrupo()) != null) {
+				return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+						.body("Existe una categoria de grupo creada con ese nombre");
+			}
+			// insertar el grupo en la db
+			catGRepo.save(grp);
+			return ResponseEntity.status(HttpStatus.CREATED).body("Categoria de Grupo creada con éxito");
+		}
 }

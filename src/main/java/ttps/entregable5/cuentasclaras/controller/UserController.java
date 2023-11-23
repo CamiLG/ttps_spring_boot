@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ttps.entregable5.cuentasclaras.model.Usuario;
@@ -26,7 +24,7 @@ public class UserController {
 	@Autowired
 	private UsuarioRepository userRepo;
 	
-	  @PostMapping // Map ONLY POST Requests
+	  @PostMapping("/create") // Map ONLY POST Requests
 		public ResponseEntity<String> createUser(@RequestBody Usuario user){
 			
 			//recibir el usuario y validar que no sea nulo
@@ -69,8 +67,6 @@ public class UserController {
 
 	  }
 	  
-	  
-	  
 		/**En el header enviar token: {idUsuario}+’123456’
 		Retorna #200 con los datos del usuario
 		especificado, #404 si no se encuentra el usuario y
@@ -101,7 +97,7 @@ public class UserController {
 		  return new ResponseEntity<String>(HttpStatus.I_AM_A_TEAPOT);
 	  }
 	  
-	  @GetMapping(path="/all")
+	  @GetMapping("/all")
 	  public @ResponseBody Iterable<Usuario> getAllUsers() {
 	    // This returns a JSON or XML with the users
 	    return userRepo.findAll();

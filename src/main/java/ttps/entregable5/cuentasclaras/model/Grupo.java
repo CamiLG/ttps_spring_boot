@@ -41,6 +41,9 @@ public class Grupo {
 	@JoinColumn(name = "categoriaGrupoId")
 	private CategoriaGrupo categoriaGrupo;
 
+	public Grupo() {
+		
+	}
 	public Grupo(Long id, String nombre, Set<Usuario> integrantes, List<Gasto> gastosGrupo,
 			CategoriaGrupo categoriaGrupo) {
 		this.id = id;

@@ -28,6 +28,9 @@ public class SaldoPorPersona {
 	@JoinColumn(name="gasto_id", nullable=false)
 	private Gasto gasto;
 
+	public SaldoPorPersona() {
+		
+	}
 	public SaldoPorPersona(Long id, double monto, Usuario saldoUsuario) {
 		this.id = id;
 		this.monto = monto;

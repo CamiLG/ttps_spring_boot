@@ -24,6 +24,10 @@ public class CategoriaGrupo {
     @JoinColumn(name = "imgId")
 	private Imagen img;
 
+	public CategoriaGrupo() {
+		
+	}
+
 	public CategoriaGrupo(Long id, String nombreGrupo, Imagen img) {
 		this.id = id;
 		this.nombreGrupo = nombreGrupo;
