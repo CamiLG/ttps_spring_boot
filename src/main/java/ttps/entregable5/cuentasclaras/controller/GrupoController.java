@@ -87,10 +87,10 @@ public class GrupoController {
 		Optional<Grupo> grupoR = grupoRepo.findById(id); 
 		if (grupoR.isPresent()) { 
 			Grupo grupo = grupoR.get();
-			List<Gasto> gastosG = grupo.getGastosGrupo(); 
+			List<Gasto> gastosG = grupoRepo.getGastos(grupo.getId()); 
 			return new ResponseEntity<List<Gasto>>(gastosG, HttpStatus.OK); 
 		} 
-		return new ResponseEntity<List<Gasto>>(HttpStatus.NOT_FOUND); 
+		return new ResponseEntity<List<Gasto>>( HttpStatus.NOT_FOUND); 
 	  }
 
 	@PostMapping("/create/catGrupo")
