@@ -82,7 +82,7 @@ public class GrupoController {
 		return new ResponseEntity<List<Grupo>>(grupos, HttpStatus.OK);
 	}
 
-	@GetMapping("/gastos/{id}") 
+	@GetMapping("/gastosDelGrupo/{id}") 
 	public ResponseEntity<List<Gasto>> getAllGastosGrupo(@PathVariable("id") Long id) { 
 		Optional<Grupo> grupoR = grupoRepo.findById(id); 
 		if (grupoR.isPresent()) { 

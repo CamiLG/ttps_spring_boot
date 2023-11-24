@@ -3,6 +3,7 @@ package ttps.entregable5.cuentasclaras.model;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,7 +33,7 @@ public class Gasto {
 	@Column(name="fecha")
 	private LocalDate fechaGasto;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "grupoId")
 	private Grupo grupo;
 
