@@ -9,7 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -59,11 +58,12 @@ public class Gasto {
 	public Gasto () {
 		
 	}
-	public Gasto(Long id, String nombre, double monto, LocalDate fechaGasto, FormaDivision formaDivision, Usuario usuarioGasto, Imagen img, List<SaldoPorPersona> saldosUsuario, CategoriaGasto categoriaGasto) {
+	public Gasto(Long id, String nombre, double monto, LocalDate fechaGasto, Grupo grupo, FormaDivision formaDivision, Usuario usuarioGasto, Imagen img, List<SaldoPorPersona> saldosUsuario, CategoriaGasto categoriaGasto) {
 		this.id = id;
 		this.nombre = nombre;
 		this.monto = monto;
 		this.fechaGasto = fechaGasto;
+		this.grupo = grupo;
 		this.formaDivision = formaDivision;
 		this.usuarioGasto = usuarioGasto;
 		this.img = img;
@@ -71,10 +71,11 @@ public class Gasto {
 		this.categoriaGasto = categoriaGasto;
 	}
 	
-	public Gasto( String nombre, double monto, LocalDate fechaGasto, FormaDivision formaDivision, Usuario usuarioGasto, Imagen img, CategoriaGasto categoriaGasto) {
+	public Gasto( String nombre, double monto, LocalDate fechaGasto, Grupo grupo, FormaDivision formaDivision, Usuario usuarioGasto, Imagen img, CategoriaGasto categoriaGasto) {
 		this.nombre = nombre;
 		this.monto = monto;
 		this.fechaGasto = fechaGasto;
+		this.grupo = grupo;
 		this.formaDivision = formaDivision;
 		this.usuarioGasto = usuarioGasto;
 		this.img = img;
@@ -111,6 +112,14 @@ public class Gasto {
 
 	public void setFechaGasto(LocalDate fechaGasto) {
 		this.fechaGasto = fechaGasto;
+	}
+	
+	public Grupo getGrupo() {
+		return grupo;
+	}
+	
+	public void setGrupo(Grupo grupo) {
+		this.grupo = grupo;
 	}
 
 	public FormaDivision getFormaDivision() {

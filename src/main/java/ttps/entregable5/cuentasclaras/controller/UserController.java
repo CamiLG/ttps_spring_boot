@@ -43,7 +43,7 @@ public class UserController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Usuario> getUsuario(@PathVariable(name = "id") Long id) {
+	public ResponseEntity<Usuario> obtenerUsuario(@PathVariable(name = "id") Long id) {
 		Optional<Usuario> usr = userRepo.findById(id);
 		if (usr.isPresent()) {
 			Usuario usrEncontrado = usr.get();
@@ -55,15 +55,14 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<Usuario> loginUsuario(String usuario, String password) {
-		// chequear si el email existe y ver si la password coincide
-		if (userRepo.existsByUsuario(usuario)) {
-			Usuario usr = userRepo.findByUsuarioAndPassword(usuario, password);
-			if (usr.getPassword() != password) {
-				return new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND);
+	public ResponseEntity<Usuario> loginUsuario(@RequestBody Usuario usuario) {
+		// chequear si el usuario existe y ver si la password coincide
+		Optional<Usuario> user = userRepo.findByUsuario(usuario.getUsuario());
+		if (user.isPresent()) {
+			Usuario usrEncontrado = user.get();
+			if (usrEncontrado.getPassword().equals(usuario.getPassword())) {
+				return new ResponseEntity<Usuario>(HttpStatus.OK);
 			}
-			return new ResponseEntity<Usuario>(HttpStatus.OK);
-
 		}
 		return new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND);
 

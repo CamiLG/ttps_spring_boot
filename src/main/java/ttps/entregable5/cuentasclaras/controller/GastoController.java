@@ -1,5 +1,6 @@
 package ttps.entregable5.cuentasclaras.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,15 +47,15 @@ public class GastoController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Gasto> getGasto(@PathVariable(name = "id") Long id) {
+	public ResponseEntity<Gasto> obtenerGasto(@PathVariable("id") Long id) {
 		Optional<Gasto> gst = gastoRepo.findById(id);
 		if (gst.isPresent()) {
 			Gasto gstEncontrado = gst.get();
 			return new ResponseEntity<Gasto>(gstEncontrado, HttpStatus.OK);
+		}else {
+			System.out.println("Gasto no encontrado");
+			return new ResponseEntity<Gasto>(HttpStatus.NOT_FOUND);
 		}
-		System.out.println("Gasto no encontrado");
-		return new ResponseEntity<Gasto>(HttpStatus.NOT_FOUND);
-
 	}
 
 	@PutMapping("/{id}")
@@ -74,11 +75,12 @@ public class GastoController {
 	}
 
 	@GetMapping("/all")
-	public @ResponseBody Iterable<Gasto> getAllGastos() {
-		return gastoRepo.findAll();
+	public ResponseEntity<List<Gasto>> obtenerTodosLosGastos() {
+		List<Gasto> gastos = gastoRepo.findAll();
+		return new ResponseEntity<List<Gasto>>(gastos, HttpStatus.OK);
 	}
 
-	@PostMapping("/create/catGrupo")
+	@PostMapping("/create/catGasto")
 	public ResponseEntity<String> crearCatGasto(@RequestBody CategoriaGasto gst) {
 		// recibir la categoria de grupo y validar que no sea nulo
 		if (gst == null || gst.getNombreGasto() == null) {
