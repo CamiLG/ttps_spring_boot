@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import ttps.entregable5.cuentasclaras.dto.GastoDTO;
 import ttps.entregable5.cuentasclaras.model.CategoriaGrupo;
 import ttps.entregable5.cuentasclaras.model.Gasto;
 import ttps.entregable5.cuentasclaras.model.Grupo;
@@ -83,14 +84,14 @@ public class GrupoController {
 	}
 
 	@GetMapping("/gastosDelGrupo/{id}") 
-	public ResponseEntity<List<Gasto>> getAllGastosGrupo(@PathVariable("id") Long id) { 
+	public ResponseEntity<List<GastoDTO>> obtenerGastosGrupo(@PathVariable("id") Long id) {
 		Optional<Grupo> grupoR = grupoRepo.findById(id); 
 		if (grupoR.isPresent()) { 
 			Grupo grupo = grupoR.get();
-			List<Gasto> gastosG = grupo.getGastosGrupo(); 
-			return new ResponseEntity<List<Gasto>>(gastosG, HttpStatus.OK); 
+			List<GastoDTO> gastosG = grupoRepo.obtenerGastos(grupo.getId());
+			return new ResponseEntity<List<GastoDTO>>(gastosG, HttpStatus.OK);
 		} 
-		return new ResponseEntity<List<Gasto>>(HttpStatus.NOT_FOUND); 
+		return new ResponseEntity<List<GastoDTO>>(HttpStatus.NOT_FOUND);
 	  }
 
 	@PostMapping("/create/catGrupo")

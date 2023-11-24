@@ -2,6 +2,7 @@ package ttps.entregable5.cuentasclaras.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,16 +37,19 @@ public class Usuario {
 	
 	@Column(name="password")
 	private String password;
-	
+
+	@JsonIgnore
 	 @ManyToMany
 	 @JoinTable(name = "amigos",
 	        joinColumns = @JoinColumn(name = "usuarioId"),
 	        inverseJoinColumns = @JoinColumn(name = "amigoId"))
 	private List<Usuario> amigos;
-	
+
+	@JsonIgnore
 	@ManyToMany(mappedBy = "integrantes")
 	private List<Grupo> grupos;
-	
+
+	@JsonIgnore
 	@OneToMany(mappedBy = "usuarioGasto")
 	private List<Gasto> gastos;
 
