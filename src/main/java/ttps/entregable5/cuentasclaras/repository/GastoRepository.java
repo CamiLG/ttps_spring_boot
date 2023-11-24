@@ -22,5 +22,5 @@ public interface GastoRepository extends JpaRepository<Gasto, Long> {
 	Gasto save(Gasto gasto);
 	void delete(Gasto gasto);
 	
-	//Especifico del Grupo
+	//Especifico del Gasto
 }
