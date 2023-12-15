@@ -61,7 +61,7 @@ public class UserController {
 		if (user.isPresent()) {
 			Usuario usrEncontrado = user.get();
 			if (usrEncontrado.getPassword().equals(usuario.getPassword())) {
-				return new ResponseEntity<Usuario>(HttpStatus.OK);
+				return new ResponseEntity<Usuario>(usrEncontrado, HttpStatus.OK);
 			}
 		}
 		return new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND);
