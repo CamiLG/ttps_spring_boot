@@ -26,7 +26,7 @@ public class UserController {
 	private UsuarioRepository userRepo;
 
 	@PostMapping("/create") // Map ONLY POST Requests
-	public ResponseEntity<String> createUser(@RequestBody Usuario user) {
+	public ResponseEntity<?> createUser(@RequestBody Usuario user) {
 
 		// recibir el usuario y validar que no sea nulo
 		if (user == null || user.getEmail() == null) {
@@ -39,7 +39,7 @@ public class UserController {
 		}
 		// insertar el usuario en la db
 		userRepo.save(user);
-		return ResponseEntity.status(HttpStatus.CREATED).body("Usuario creado con éxito");
+		return new ResponseEntity<Usuario>(user, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/{id}")
@@ -55,7 +55,7 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<Usuario> loginUsuario(@RequestBody Usuario usuario) {
+	public ResponseEntity<?> loginUsuario(@RequestBody Usuario usuario) {
 		// chequear si el usuario existe y ver si la password coincide
 		Optional<Usuario> user = userRepo.findByUsuario(usuario.getUsuario());
 		if (user.isPresent()) {
@@ -64,7 +64,7 @@ public class UserController {
 				return new ResponseEntity<Usuario>(usrEncontrado, HttpStatus.OK);
 			}
 		}
-		return new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario y/o contraseña incorrecta");
 
 	}
 
