@@ -33,7 +33,7 @@ public class GrupoController {
 	private CategoriaGrupoRepository catGRepo;
 
 	@PostMapping("/create")
-	public ResponseEntity<String> crearGrupo(@RequestBody Grupo grp) {
+	public ResponseEntity<?> crearGrupo(@RequestBody Grupo grp) {
 		// recibir el grupo y validar que no sea nulo
 		if (grp == null || grp.getNombre() == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El grupo no ha sido bien cargado");
@@ -44,23 +44,23 @@ public class GrupoController {
 		}
 		// insertar el grupo en la db
 		grupoRepo.save(grp);
-		return ResponseEntity.status(HttpStatus.CREATED).body("Grupo creado con éxito");
+		return new ResponseEntity<Grupo>(grp, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Grupo> obtenerGrupo(@PathVariable("id") Long id) {
+	public ResponseEntity<?> obtenerGrupo(@PathVariable("id") Long id) {
 		Optional<Grupo> grp = grupoRepo.findById(id);
 		if (grp.isPresent()) {
 			Grupo grpEncontrado = grp.get();
 			return new ResponseEntity<Grupo>(grpEncontrado, HttpStatus.OK);
 		} else {
 			System.out.println("Grupo no encontrado");
-			return new ResponseEntity<Grupo>(HttpStatus.NOT_FOUND);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Grupo no encontrado");
 		}
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Grupo> editarGrupo(@RequestBody Grupo grp, @PathVariable("id") Long id) {
+	public ResponseEntity<?> editarGrupo(@RequestBody Grupo grp, @PathVariable("id") Long id) {
 		Optional<Grupo> grupoR = grupoRepo.findById(id);
 		if (grupoR.isPresent()) {
 			Grupo grupo = grupoR.get();
@@ -69,7 +69,7 @@ public class GrupoController {
 			Grupo gActualizado = grupoRepo.save(grupo);
 			return new ResponseEntity<Grupo>(gActualizado, HttpStatus.OK);
 		}
-		return new ResponseEntity<Grupo>(HttpStatus.NOT_FOUND);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El grupo no pudo modificarse");
 	}
 
 	/*
@@ -84,18 +84,18 @@ public class GrupoController {
 	}
 
 	@GetMapping("/gastosDelGrupo/{id}") 
-	public ResponseEntity<List<GastoDTO>> obtenerGastosGrupo(@PathVariable("id") Long id) {
+	public ResponseEntity<?> obtenerGastosGrupo(@PathVariable("id") Long id) {
 		Optional<Grupo> grupoR = grupoRepo.findById(id); 
 		if (grupoR.isPresent()) { 
 			Grupo grupo = grupoR.get();
 			List<GastoDTO> gastosG = grupoRepo.obtenerGastos(grupo.getId());
 			return new ResponseEntity<List<GastoDTO>>(gastosG, HttpStatus.OK);
 		} 
-		return new ResponseEntity<List<GastoDTO>>(HttpStatus.NOT_FOUND);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Grupo no encontrado");
 	  }
 
 	@PostMapping("/create/catGrupo")
-	public ResponseEntity<String> crearCatGrupo(@RequestBody CategoriaGrupo grp) {
+	public ResponseEntity<?> crearCatGrupo(@RequestBody CategoriaGrupo grp) {
 		// recibir la categoria de grupo y validar que no sea nulo
 		if (grp == null || grp.getNombreGrupo() == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La categoria del grupo no ha sido bien cargada");
@@ -107,6 +107,6 @@ public class GrupoController {
 		}
 		// insertar el grupo en la db
 		catGRepo.save(grp);
-		return ResponseEntity.status(HttpStatus.CREATED).body("Categoria de Grupo creada con éxito");
+		return new ResponseEntity<CategoriaGrupo>(grp, HttpStatus.CREATED);
 	}
 }

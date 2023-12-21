@@ -32,7 +32,7 @@ public class GastoController {
 	private CategoriaGastoRepository catGastoRepo;
 
 	@PostMapping("/create")
-	public ResponseEntity<String> crearGasto(@RequestBody Gasto gst) {
+	public ResponseEntity<?> crearGasto(@RequestBody Gasto gst) {
 		// recibir el gasto y validar que no sea nulo
 		if (gst == null || gst.getNombre() == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El Gasto no ha sido bien cargado");
@@ -43,23 +43,23 @@ public class GastoController {
 		}
 		// insertar el gasto en la db
 		gastoRepo.save(gst);
-		return ResponseEntity.status(HttpStatus.CREATED).body("Gasto creado con éxito");
+		return new ResponseEntity<Gasto>(gst, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Gasto> obtenerGasto(@PathVariable("id") Long id) {
+	public ResponseEntity<?> obtenerGasto(@PathVariable("id") Long id) {
 		Optional<Gasto> gst = gastoRepo.findById(id);
 		if (gst.isPresent()) {
 			Gasto gstEncontrado = gst.get();
 			return new ResponseEntity<Gasto>(gstEncontrado, HttpStatus.OK);
 		}else {
 			System.out.println("Gasto no encontrado");
-			return new ResponseEntity<Gasto>(HttpStatus.NOT_FOUND);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Gasto no encontrado");
 		}
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Gasto> editarGasto(@RequestBody Gasto gst, @PathVariable("id") Long id) {
+	public ResponseEntity<?> editarGasto(@RequestBody Gasto gst, @PathVariable("id") Long id) {
 		Optional<Gasto> gastoR = gastoRepo.findById(id);
 		if (gastoR.isPresent()) {
 			Gasto gasto = gastoR.get();
@@ -71,7 +71,7 @@ public class GastoController {
 			gastoRepo.save(gasto);
 			return new ResponseEntity<Gasto>(gasto, HttpStatus.OK);
 		}
-		return new ResponseEntity<Gasto>(HttpStatus.NOT_FOUND);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Gasto no encontrado");
 	}
 
 	@GetMapping("/all")
@@ -81,7 +81,7 @@ public class GastoController {
 	}
 
 	@PostMapping("/create/catGasto")
-	public ResponseEntity<String> crearCatGasto(@RequestBody CategoriaGasto gst) {
+	public ResponseEntity<?> crearCatGasto(@RequestBody CategoriaGasto gst) {
 		// recibir la categoria de grupo y validar que no sea nulo
 		if (gst == null || gst.getNombreGasto() == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La categoria del gasto no ha sido bien cargada");
@@ -93,6 +93,6 @@ public class GastoController {
 		}
 		// insertar el grupo en la db
 		catGastoRepo.save(gst);
-		return ResponseEntity.status(HttpStatus.CREATED).body("Categoria de gasto creada con éxito");
+		return new ResponseEntity<CategoriaGasto>(gst,HttpStatus.CREATED);
 	}
 }

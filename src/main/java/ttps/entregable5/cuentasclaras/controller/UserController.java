@@ -90,7 +90,7 @@ public class UserController {
 	 * new ResponseEntity<Usuario>(usuario, HttpStatus.OK); }
 	 **/
 	@PutMapping("/{id}")
-	public ResponseEntity<Usuario> editarUsuario(@RequestBody Usuario usr, @PathVariable("id") Long id) {
+	public ResponseEntity<?> editarUsuario(@RequestBody Usuario usr, @PathVariable("id") Long id) {
 		Optional<Usuario> usrDB = userRepo.findById(id);
 		if (usrDB.isPresent()) {
 			Usuario usuario = usrDB.get();
@@ -102,7 +102,7 @@ public class UserController {
 			userRepo.save(usuario);
 			return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
 		}
-		return new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado, no es posible editar");
 	}
 
 	@GetMapping("/all")

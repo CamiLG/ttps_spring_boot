@@ -26,7 +26,7 @@ public class ImagenController {
 	private ImagenRepository imgRepo;
 
 	@PostMapping
-	public ResponseEntity<String> crearImagen(@RequestBody Imagen img) {
+	public ResponseEntity<?> crearImagen(@RequestBody Imagen img) {
 		// recibir la imagen y validar que no sea nula
 		if (img == null || img.getNombre() == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La imagen no ha sido bien cargada");
@@ -37,23 +37,23 @@ public class ImagenController {
 		}
 		// insertar la imagen en la db
 		imgRepo.save(img);
-		return ResponseEntity.status(HttpStatus.CREATED).body("Imagen agregada con éxito");
+		return new ResponseEntity<Imagen>(HttpStatus.CREATED);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Imagen> getImagen(@PathVariable(name = "id") Long id) {
+	public ResponseEntity<?> getImagen(@PathVariable(name = "id") Long id) {
 		Optional<Imagen> img = imgRepo.findById(id);
 		if (img.isPresent()) {
 			Imagen imgEncontrada = img.get();
 			return new ResponseEntity<Imagen>(imgEncontrada, HttpStatus.OK);
 		}
 		System.out.println("Imagen no encontrada");
-		return new ResponseEntity<Imagen>(HttpStatus.NOT_FOUND);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Imagen no encontrada");
 
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Imagen> editarImagen(@RequestBody Imagen img, @PathVariable("id") Long id) {
+	public ResponseEntity<?> editarImagen(@RequestBody Imagen img, @PathVariable("id") Long id) {
 		Optional<Imagen> imgR = imgRepo.findById(id);
 		if (imgR.isPresent()) {
 			Imagen imagen = imgR.get();
@@ -62,7 +62,7 @@ public class ImagenController {
 			imgRepo.save(imagen);
 			return new ResponseEntity<Imagen>(imagen, HttpStatus.OK);
 		}
-		return new ResponseEntity<Imagen>(HttpStatus.NOT_FOUND);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No encontrado");
 	}
 
 	@GetMapping("/all")
