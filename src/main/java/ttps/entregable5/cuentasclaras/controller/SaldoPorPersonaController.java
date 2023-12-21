@@ -27,7 +27,7 @@ public class SaldoPorPersonaController {
 	
 
 	@PostMapping
-	public ResponseEntity<String> crearSaldosPersona(@RequestBody SaldoPorPersona spp) {
+	public ResponseEntity<?> crearSaldosPersona(@RequestBody SaldoPorPersona spp) {
 		// recibir el saldo por persona y validar que el usuario no sea nulo
 		if (spp == null || spp.getSaldoUsuario() == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El saldo por persona no ha sido bien cargado");
@@ -38,23 +38,23 @@ public class SaldoPorPersonaController {
 		}
 		// insertar el saldo por persona en la db
 		sppRepo.save(spp);
-		return ResponseEntity.status(HttpStatus.CREATED).body("Saldo para persona creado con éxito");
+		return new ResponseEntity<SaldoPorPersona>(spp, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<SaldoPorPersona> getSaldosPorPersona(@PathVariable(name = "id") Long id) {
+	public ResponseEntity<?> getSaldosPorPersona(@PathVariable(name = "id") Long id) {
 		Optional<SaldoPorPersona> spp = sppRepo.findById(id);
 		if (spp.isPresent()) {
 			SaldoPorPersona sppEncontrado = spp.get();
 			return new ResponseEntity<SaldoPorPersona>(sppEncontrado, HttpStatus.OK);
 		}
 		System.out.println("Saldo de persona no encontrado");
-		return new ResponseEntity<SaldoPorPersona>(HttpStatus.NOT_FOUND);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Saldo de persona no encontrado");
 
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<SaldoPorPersona> editarSaldosPorPersona(@RequestBody SaldoPorPersona spp, @PathVariable("id") Long id) {
+	public ResponseEntity<?> editarSaldosPorPersona(@RequestBody SaldoPorPersona spp, @PathVariable("id") Long id) {
 		Optional<SaldoPorPersona> sppR = sppRepo.findById(id);
 		if (sppR.isPresent()) {
 			SaldoPorPersona saldo = sppR.get();
@@ -63,7 +63,7 @@ public class SaldoPorPersonaController {
 			sppRepo.save(saldo);
 			return new ResponseEntity<SaldoPorPersona>(saldo, HttpStatus.OK);
 		}
-		return new ResponseEntity<SaldoPorPersona>(HttpStatus.NOT_FOUND);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se puede editar el saldo");
 	}
 
 	@GetMapping("/all")

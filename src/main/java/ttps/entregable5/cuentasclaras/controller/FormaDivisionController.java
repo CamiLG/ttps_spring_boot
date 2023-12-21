@@ -25,7 +25,7 @@ public class FormaDivisionController {
 	private FormaDivisionRepository fdRepo;
 	
 	@PostMapping
-	public ResponseEntity<String> crearFormaDivision(@RequestBody FormaDivision fd) {
+	public ResponseEntity<?> crearFormaDivision(@RequestBody FormaDivision fd) {
 		// recibir la forma de division y validar que no sea nulo
 		if (fd == null || fd.getDescripcion() == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La forma de division no ha sido bien cargada");
@@ -36,18 +36,18 @@ public class FormaDivisionController {
 		}
 		// insertarla forma de division en la db
 		fdRepo.save(fd);
-		return ResponseEntity.status(HttpStatus.CREATED).body("Forma de division creada con éxito");
+		return new ResponseEntity<FormaDivision>(fd, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<FormaDivision> getFormaDivision(@PathVariable(name = "id") Long id) {
+	public ResponseEntity<?> getFormaDivision(@PathVariable(name = "id") Long id) {
 		Optional<FormaDivision> fd = fdRepo.findById(id);
 		if (fd.isPresent()) {
 			FormaDivision fdEncontrado = fd.get();
 			return new ResponseEntity<FormaDivision>(fdEncontrado, HttpStatus.OK);
 		}
 		System.out.println("Forma de division no encontrada");
-		return new ResponseEntity<FormaDivision>(HttpStatus.NOT_FOUND);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Forma de division no encontrada");
 
 	}
 
