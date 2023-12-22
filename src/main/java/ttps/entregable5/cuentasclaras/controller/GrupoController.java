@@ -109,4 +109,22 @@ public class GrupoController {
 		catGRepo.save(grp);
 		return new ResponseEntity<CategoriaGrupo>(grp, HttpStatus.CREATED);
 	}
+
+	@GetMapping("/cat/all")
+	public ResponseEntity<List<CategoriaGrupo>> obtenerTodasLasCategoriasGrupo() {
+		List<CategoriaGrupo> cats = catGRepo.findAll();
+		return new ResponseEntity<List<CategoriaGrupo>>(cats, HttpStatus.OK);
+	}
+
+	@GetMapping("/cat/{id}")
+	public ResponseEntity<?> obtenerCatGrupo(@PathVariable("id") Long id) {
+		Optional<CategoriaGrupo> grp = catGRepo.findById(id);
+		if (grp.isPresent()) {
+			CategoriaGrupo grpEncontrado = grp.get();
+			return new ResponseEntity<CategoriaGrupo>(grpEncontrado, HttpStatus.OK);
+		} else {
+			System.out.println("Categoria de grupo no encontrada");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categoria de grupo no encontrada");
+		}
+	}
 }
