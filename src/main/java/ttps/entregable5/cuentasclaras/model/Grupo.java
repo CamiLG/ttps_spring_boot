@@ -3,6 +3,7 @@ package ttps.entregable5.cuentasclaras.model;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,6 +35,7 @@ public class Grupo {
 					@JoinColumn(name = "usuarioId", referencedColumnName = "id") })
 	private Set<Usuario> integrantes;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "grupo", cascade = CascadeType.ALL)
 	private List<Gasto> gastosGrupo;
 

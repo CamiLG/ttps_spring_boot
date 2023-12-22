@@ -23,10 +23,11 @@ public class GastoDTO {
     public GastoDTO () {
 
     }
-    public GastoDTO(Long id, String nombre, double monto) {
+    public GastoDTO(Long id, String nombre, double monto, CategoriaGasto cat) {
         this.id = id;
         this.nombre = nombre;
         this.monto = monto;
+        this.categoriaGasto = cat;
     }
 
     public GastoDTO( String nombre, double monto, LocalDate fechaGasto, FormaDivision formaDivision, Imagen img, CategoriaGasto categoriaGasto) {

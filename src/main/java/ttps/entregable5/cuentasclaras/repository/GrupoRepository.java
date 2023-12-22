@@ -20,7 +20,7 @@ public interface GrupoRepository extends JpaRepository<Grupo, Long> {
 	boolean existsByNombre(String nombre);
 
 
-	@Query("Select new ttps.entregable5.cuentasclaras.dto.GastoDTO(gas.id,gas.nombre,gas.monto)  from Gasto gas join Grupo gr on (gas.grupo.id = gr.id) where gas.grupo.id = ?1")
+	@Query("Select new ttps.entregable5.cuentasclaras.dto.GastoDTO(gas.id,gas.nombre,gas.monto, gas.categoriaGasto)  from Gasto gas join Grupo gr on (gas.grupo.id = gr.id) where gas.grupo.id = ?1")
 	List<GastoDTO> obtenerGastos(Long id);
 	
 	//Guardar/actualizar y borrar grupos
