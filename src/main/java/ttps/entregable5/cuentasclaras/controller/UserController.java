@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ttps.entregable5.cuentasclaras.model.Credentials;
 import ttps.entregable5.cuentasclaras.model.Usuario;
 import ttps.entregable5.cuentasclaras.repository.UsuarioRepository;
+import ttps.entregable5.cuentasclaras.service.TokenService;
 
 @Controller
 @RequestMapping(path = "/usuarios", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -24,6 +26,13 @@ public class UserController {
 
 	@Autowired
 	private UsuarioRepository userRepo;
+
+	@Autowired
+	private TokenService tokenService;
+
+	// un dia
+	private final int EXPIRATION_IN_SEC = 100;
+
 
 	@PostMapping("/create") // Map ONLY POST Requests
 	public ResponseEntity<?> createUser(@RequestBody Usuario user) {
@@ -54,6 +63,7 @@ public class UserController {
 
 	}
 
+	/*
 	@PostMapping("/login")
 	public ResponseEntity<?> loginUsuario(@RequestBody Usuario usuario) {
 		// chequear si el usuario existe y ver si la password coincide
@@ -65,7 +75,28 @@ public class UserController {
 			}
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario y/o contraseña incorrecta");
+	}*/
 
+	@PostMapping(path = "/login")
+	public ResponseEntity<?> authenticate(@RequestBody Usuario usr) {
+
+		if(isLoginSuccess(usr.getUsuario(), usr.getPassword())) {
+			String token = tokenService.generateToken(usr.getUsuario(), EXPIRATION_IN_SEC);
+			Usuario user = userRepo.findByUsuario(usr.getUsuario());
+			String userId = Long.toString(user.getId());
+			System.out.println(userId);
+
+			return ResponseEntity.ok(new Credentials(token, EXPIRATION_IN_SEC, usr.getUsuario(), userId));
+		} else {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario o password incorrecto");
+		}
+	}
+	private boolean isLoginSuccess(String username, String password) {
+		// recupero el usuario de la base de usuarios
+		Usuario u = userRepo.findByUsuarioAndPassword(username,password);
+
+		// chequeo que el usuario exista y el password sea correcto
+		return (u != null && u.getPassword().equals(password));
 	}
 
 	/**
