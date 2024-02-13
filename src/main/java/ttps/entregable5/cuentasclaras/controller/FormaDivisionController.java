@@ -1,5 +1,6 @@
 package ttps.entregable5.cuentasclaras.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ttps.entregable5.cuentasclaras.model.CategoriaGrupo;
 import ttps.entregable5.cuentasclaras.model.FormaDivision;
 import ttps.entregable5.cuentasclaras.repository.FormaDivisionRepository;
 
@@ -51,9 +53,15 @@ public class FormaDivisionController {
 
 	}
 
+	//@GetMapping("/all")
+	//public @ResponseBody Iterable<FormaDivision> getAllFormaDivision() {
+	//	return fdRepo.findAll();
+	//}
+
 	@GetMapping("/all")
-	public @ResponseBody Iterable<FormaDivision> getAllFormaDivision() {
-		return fdRepo.findAll();
+	public ResponseEntity<List<FormaDivision>> getAllFormaDivision() {
+		List<FormaDivision> fd = fdRepo.findAll();
+		return new ResponseEntity<List<FormaDivision>>(fd, HttpStatus.OK);
 	}
 
 }

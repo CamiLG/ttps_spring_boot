@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import ttps.entregable5.cuentasclaras.model.Credentials;
+import ttps.entregable5.cuentasclaras.model.Credenciales;
 import ttps.entregable5.cuentasclaras.model.Usuario;
 import ttps.entregable5.cuentasclaras.repository.UsuarioRepository;
 import ttps.entregable5.cuentasclaras.service.TokenService;
@@ -86,7 +86,7 @@ public class UserController {
 			String userId = Long.toString(user.getId());
 			System.out.println(userId);
 
-			return ResponseEntity.ok(new Credentials(token, EXPIRATION_IN_SEC, usr.getUsuario(), userId));
+			return ResponseEntity.ok(new Credenciales(token, EXPIRATION_IN_SEC, usr.getUsuario(), userId));
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario o password incorrecto");
 		}

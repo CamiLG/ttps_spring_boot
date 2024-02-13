@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ttps.entregable5.cuentasclaras.model.CategoriaGasto;
+import ttps.entregable5.cuentasclaras.model.CategoriaGrupo;
 import ttps.entregable5.cuentasclaras.model.Gasto;
 import ttps.entregable5.cuentasclaras.repository.CategoriaGastoRepository;
 import ttps.entregable5.cuentasclaras.repository.GastoRepository;
@@ -94,5 +95,23 @@ public class GastoController {
 		// insertar el grupo en la db
 		catGastoRepo.save(gst);
 		return new ResponseEntity<CategoriaGasto>(gst,HttpStatus.CREATED);
+	}
+
+	@GetMapping("/cat/all")
+	public ResponseEntity<List<CategoriaGasto>> obtenerTodasLasCategoriasGasto() {
+		List<CategoriaGasto> cats = catGastoRepo.findAll();
+		return new ResponseEntity<List<CategoriaGasto>>(cats, HttpStatus.OK);
+	}
+
+	@GetMapping("/cat/{id}")
+	public ResponseEntity<?> obtenerCatGasto(@PathVariable("id") Long id) {
+		Optional<CategoriaGasto> gasto = catGastoRepo.findById(id);
+		if (gasto.isPresent()) {
+			CategoriaGasto gastoEncontrado = gasto.get();
+			return new ResponseEntity<CategoriaGasto>(gastoEncontrado, HttpStatus.OK);
+		} else {
+			System.out.println("Categoria de grupo no encontrada");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categoria de gasto no encontrada");
+		}
 	}
 }

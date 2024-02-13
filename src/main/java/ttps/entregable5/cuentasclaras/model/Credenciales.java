@@ -1,16 +1,16 @@
 package ttps.entregable5.cuentasclaras.model;
 
-public class Credentials {
+public class Credenciales {
 
     private String token;
     private int exp;
     private String username;
     private String userId;
 
-    public Credentials() {
+    public Credenciales() {
     }
 
-    public Credentials(String token, int exp, String username, String userID) {
+    public Credenciales(String token, int exp, String username, String userID) {
         this.token = token;
         this.exp = exp;
         this.username = username;

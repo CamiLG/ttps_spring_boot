@@ -15,8 +15,8 @@ public interface CategoriaGastoRepository extends JpaRepository<CategoriaGasto, 
 	List<CategoriaGasto> findAll();
 	boolean existsByNombreGasto(String nombre); 
 	
-	//Guardar y actualizar categorias de grupos
+	//Guardar y actualizar categorias de gastos
 	CategoriaGasto save(CategoriaGasto catGasto);
 	
-	//Especifico de las Categorias de Grupos
+	//Especifico de las Categorias de Gastos
 }
