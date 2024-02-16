@@ -3,7 +3,10 @@ package ttps.entregable5.cuentasclaras.controller;
 import java.util.List;
 import java.util.Optional;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +22,10 @@ import ttps.entregable5.cuentasclaras.dto.GastoDTO;
 import ttps.entregable5.cuentasclaras.model.CategoriaGrupo;
 import ttps.entregable5.cuentasclaras.model.Gasto;
 import ttps.entregable5.cuentasclaras.model.Grupo;
+import ttps.entregable5.cuentasclaras.model.Usuario;
 import ttps.entregable5.cuentasclaras.repository.CategoriaGrupoRepository;
 import ttps.entregable5.cuentasclaras.repository.GrupoRepository;
+import ttps.entregable5.cuentasclaras.repository.UsuarioRepository;
 
 @Controller
 @RequestMapping(path = "/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -28,6 +33,9 @@ public class GrupoController {
 
 	@Autowired
 	private GrupoRepository grupoRepo;
+
+	@Autowired
+	private UsuarioRepository uRepo;
 
 	@Autowired
 	private CategoriaGrupoRepository catGRepo;
@@ -83,6 +91,13 @@ public class GrupoController {
 		return new ResponseEntity<List<Grupo>>(grupos, HttpStatus.OK);
 	}
 
+	/*@GetMapping("/mis-grupos/{id}")
+	public ResponseEntity<List<Grupo>> obtenerSoloMisGrupos(Long id) {
+		List<Grupo> misGrupos = grupoRepo.obtenerMisGrupos(id);
+		System.out.println(misGrupos);
+		return new ResponseEntity<List<Grupo>>(misGrupos, HttpStatus.OK);
+	}*/
+
 	@GetMapping("/gastosDelGrupo/{id}") 
 	public ResponseEntity<?> obtenerGastosGrupo(@PathVariable("id") Long id) {
 		Optional<Grupo> grupoR = grupoRepo.findById(id); 
@@ -126,5 +141,35 @@ public class GrupoController {
 			System.out.println("Categoria de grupo no encontrada");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categoria de grupo no encontrada");
 		}
+	}
+
+	@GetMapping("/ultimoGrupo")
+	public ResponseEntity<?> obtenerUltimoGrupoCreado() {
+		Sort sort = Sort.by(Sort.Direction.DESC, "id");
+		PageRequest pr = PageRequest.of(0,1,sort);
+		Grupo g = grupoRepo.findAll(pr).getContent().get(0);
+		return new ResponseEntity<Grupo>(g, HttpStatus.OK);
+	}
+
+
+	@GetMapping("/asignar/{userId}/{gId}")
+	public ResponseEntity<?> asignarGrupoUsuario(@PathVariable("userId") Long userId, @PathVariable("gId")Long grp) {
+		// validar que no sea nulo
+		if (grp == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se recibió el elemento");
+		}
+		Optional<Usuario> user = uRepo.findById(userId);
+		Optional<Grupo> grupo = grupoRepo.findById(grp);
+
+		if ((user.isPresent())&& (grupo.isPresent())) {
+			Usuario uEncontrado = user.get();
+			Grupo grpEncontrado = grupo.get();
+
+			grpEncontrado.getIntegrantes().add(uEncontrado);
+			// insertar el grupo en la db
+			grupoRepo.save(grpEncontrado);
+			return new ResponseEntity<Grupo>(grpEncontrado, HttpStatus.OK);
+		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Ocurrio un error");
 	}
 }

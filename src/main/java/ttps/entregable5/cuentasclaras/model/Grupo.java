@@ -85,11 +85,11 @@ public class Grupo {
 	}
 
 	public Set<Usuario> getIntegrantes() {
-		return integrantes;
+		return this.integrantes;
 	}
 
-	public void setIntegrantes(Set<Usuario> integrantes) {
-		this.integrantes = integrantes;
+	public void setIntegrantes(Usuario integrante) {
+		this.integrantes.add(integrante);
 	}
 
 	public List<Gasto> getGastosGrupo() {

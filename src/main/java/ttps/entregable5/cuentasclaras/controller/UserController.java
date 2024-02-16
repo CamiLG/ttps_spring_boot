@@ -1,5 +1,6 @@
 package ttps.entregable5.cuentasclaras.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,6 @@ public class UserController {
 		}
 		System.out.println("Usuario no encontrado");
 		return new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND);
-
 	}
 
 	/*
@@ -140,5 +140,16 @@ public class UserController {
 	public @ResponseBody Iterable<Usuario> getAllUsers() {
 		// This returns a JSON or XML with the users
 		return userRepo.findAll();
+	}
+
+	@GetMapping("/amigos/{id}")
+	public ResponseEntity<?> obtenerMisAmigos(@PathVariable("id") Long id) {
+		Optional<Usuario> usr = userRepo.findById(id);
+		if (usr.isPresent()) {
+			Usuario usuario = usr.get();
+			List<Usuario> amigos = usuario.getAmigos();
+			return new ResponseEntity<List<Usuario>>(amigos, HttpStatus.OK);
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Persona no encontrada");
 	}
 }

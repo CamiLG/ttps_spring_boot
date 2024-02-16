@@ -19,6 +19,8 @@ public class GastoDTO {
 
     private CategoriaGasto categoriaGasto;
 
+    private Usuario usuarioGasto;
+
     public GastoDTO () {
 
     }
@@ -29,7 +31,7 @@ public class GastoDTO {
         this.categoriaGasto = cat;
     }
 
-    public GastoDTO(Long id, String nombre, double monto, LocalDate fechaGasto, FormaDivision formaDivision, Imagen img, CategoriaGasto categoriaGasto) {
+    public GastoDTO(Long id, String nombre, double monto, LocalDate fechaGasto, FormaDivision formaDivision, Imagen img, CategoriaGasto categoriaGasto, Usuario usr) {
         this.id = id;
         this.nombre = nombre;
         this.monto = monto;
@@ -37,15 +39,17 @@ public class GastoDTO {
         this.formaDivision = formaDivision;
         this.img = img;
         this.categoriaGasto = categoriaGasto;
+        this.usuarioGasto = usr;
     }
 
-    public GastoDTO( String nombre, double monto, LocalDate fechaGasto, FormaDivision formaDivision, Imagen img, CategoriaGasto categoriaGasto) {
+    public GastoDTO( String nombre, double monto, LocalDate fechaGasto, FormaDivision formaDivision, Imagen img, CategoriaGasto categoriaGasto, Usuario usr) {
         this.nombre = nombre;
         this.monto = monto;
         this.fechaGasto = fechaGasto;
         this.formaDivision = formaDivision;
         this.img = img;
         this.categoriaGasto = categoriaGasto;
+        this.usuarioGasto = usr;
     }
 
     public Long getId() {
