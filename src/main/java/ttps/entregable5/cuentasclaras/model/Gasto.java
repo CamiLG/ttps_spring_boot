@@ -70,7 +70,7 @@ public class Gasto {
 		this.formaDivision = formaDivision;
 		this.usuarioGasto = usuarioGasto;
 		this.img = img;
-		this.saldosUsuario = saldosUsuario;
+		//this.saldosUsuario = saldosUsuario;
 		this.categoriaGasto = categoriaGasto;
 	}
 	

@@ -29,6 +29,7 @@ public class Grupo {
 	@Column(name = "nombre")
 	private String nombre;
 
+	@JsonIgnore
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(name = "grupo_usuario", joinColumns = {
 			@JoinColumn(name = "grupoId", referencedColumnName = "id") }, inverseJoinColumns = {
@@ -46,11 +47,11 @@ public class Grupo {
 	public Grupo() {
 		
 	}
-	public Grupo(Long id, String nombre, Set<Usuario> integrantes, List<Gasto> gastosGrupo,
+	public Grupo(Long id, String nombre, List<Gasto> gastosGrupo,
 			CategoriaGrupo categoriaGrupo) {
 		this.id = id;
 		this.nombre = nombre;
-		this.integrantes = integrantes;
+		//this.integrantes = integrantes;
 		this.gastosGrupo = gastosGrupo;
 		this.categoriaGrupo = categoriaGrupo;
 	}

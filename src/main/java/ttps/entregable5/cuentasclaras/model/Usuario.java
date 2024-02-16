@@ -57,7 +57,7 @@ public class Usuario {
 		
 	}
 	
-	public Usuario(Long id, String nombre, String apellido, String usuario, String email, String password, List<Usuario> amigos, List<Grupo> grupos, List<Gasto> gastos) {
+	public Usuario(Long id, String nombre, String apellido, String usuario, String email, String password, List<Usuario> amigos) {
 		this.id = id;
 		this.nombre = nombre;
 		this.apellido = apellido;
@@ -65,8 +65,8 @@ public class Usuario {
 		this.email = email;
 		this.password = password;
 		this.amigos = amigos;
-		this.grupos = grupos;
-		this.gastos = gastos;
+		//this.grupos = grupos;
+		//this.gastos = gastos;
 	}
 	
 	public Usuario(String nombre, String apellido, String usuario, String email, String password) {

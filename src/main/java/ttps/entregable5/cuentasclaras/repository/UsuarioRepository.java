@@ -11,7 +11,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
 	//find by distintos criterios
 	Optional<Usuario> findById(Long id);
-	//Usuario getUsuario(Long id);
+
 	//Optional<Usuario> findByUsuario(String usuario);
 	Usuario findByEmail(String email);
 

@@ -53,14 +53,14 @@ public class UserController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Usuario> obtenerUsuario(@PathVariable(name = "id") Long id) {
+	public ResponseEntity<?> obtenerUsuario(@PathVariable(name = "id") Long id) {
 		Optional<Usuario> usr = userRepo.findById(id);
 		if (usr.isPresent()) {
 			Usuario usrEncontrado = usr.get();
 			return new ResponseEntity<Usuario>(usrEncontrado, HttpStatus.OK);
 		}
 		System.out.println("Usuario no encontrado");
-		return new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
 	}
 
 	/*
